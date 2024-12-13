@@ -1,0 +1,40 @@
+services:
+  joomla:
+    image: joomla
+    restart: always
+    ports:
+      - 8080:80 # port expose
+    environment:
+      JOOMLA_DB_HOST: db # database service
+      JOOMLA_DB_USER: joomla # database user
+      JOOMLA_DB_PASSWORD: examplepass # database pass
+      JOOMLA_DB_NAME: joomla_db # database name
+      JOOMLA_SITE_NAME: Vuong # Site name
+      JOOMLA_ADMIN_USER: Tran Duc Vuong # User name
+      JOOMLA_ADMIN_USERNAME: ace # admin user account
+      JOOMLA_ADMIN_PASSWORD: joomla@secured # admin password
+      JOOMLA_ADMIN_EMAIL: joomla@example.com # admin email
+    volumes:
+      - joomla_data:/var/www/html
+    networks:
+      - joomla_network
+
+  db: # database service
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: joomla_db # database name
+      MYSQL_USER: joomla # database user
+      MYSQL_PASSWORD: examplepass # database pass
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - joomla_network
+
+volumes:
+  joomla_data:
+  db_data:
+
+networks:
+  joomla_network:
